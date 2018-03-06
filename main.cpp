@@ -11,6 +11,8 @@ struct lista		//elementy listy
 	int dana;
 };
 
+//PRZEROBIÆ NA SZABLON !!
+
 class Kolejka		//klasa kolejka
 {
 private:
@@ -21,7 +23,7 @@ public:
 	Kolejka();	//konstruktor
 	~Kolejka();	//destruktor
     bool empty(); //funkcja sprawdza czy pusta
-    void push(int p, int v); //funckja dodaje do kolejki
+    void push(int priorytet, int wartosc); //funckja dodaje do kolejki
 };
 
 //**********************************//
@@ -39,6 +41,7 @@ Kolejka::~Kolejka()
  //Pozniej dodam jak napisze pop
 }
 
+//SPRAWDZA CZY PUSTA
 bool Kolejka::empty()
 {
     if(!head)
@@ -47,26 +50,36 @@ bool Kolejka::empty()
         return false;
 }
 
-void Kolejka::push(int pr, int v)
+//DODAJE ELEMENT DO KOLEJKI ZGODNIE Z PRIORYTETEM
+void Kolejka::push(int priorytet, int wartosc)
 {
- /*
+
     lista *p , *r;
     p = new lista;
     p->next = NULL;
-    p->priorytet = pr;
-    p->dana = v;
+    p->priorytet = priorytet;
+    p->dana = wartosc;
 
     if(!head) head = tail = p; //jesli jest pusta to wstawiamy
-    else if(head->pr < priorytet)
+    else if(head->priorytet < priorytet)    //sprawdzamy czy element ma najwyzszy priorytet
     {
-        //czy najwyzszy priorytet i wstawiamy
+        p->next = head;     //wstawiamy element na poczatek listy
+        head = p;
     }
-    else
+    else    //sprawdzamy nizsze priorytety i wstawiamy przed nie
     {
-        //sprawdzamy nizsze priorytety i wstawiamy przed element o nizszym niz nasz
+        r=head; //sprawdzamy od poczatku
+        while((r->next)&&(r->next->priorytet >= priorytet))
+            r=r->next; //wstawiam na poczatek listy
+        p->next = r->next; //wstawiamy przed element r->next
+        r->next = p;
+        if(!p->next) tail = p; //jesli jest na koncu to tail
     }
-    */
+
 }
+
+
+
 
 
 int main()
@@ -74,9 +87,13 @@ int main()
 	cout << "KOLEJKA PRIORYTETOWA" << endl;
 
     Kolejka K;
+    int priorytet,wartosc;
+    priorytet = 2;
+    wartosc = 5;
+    K.push(priorytet,wartosc);
+
     if(K.empty()==true) cout<<"pusta"<<endl;
-
-
+    else cout<<"nie jest pusta"<<endl;
 
 
 
@@ -86,3 +103,4 @@ int main()
 	system("PAUSE");
 	return 0;
 }
+
