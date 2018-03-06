@@ -24,6 +24,8 @@ public:
 	~Kolejka();	//destruktor
     bool empty(); //funkcja sprawdza czy pusta
     void push(int priorytet, int wartosc); //funckja dodaje do kolejki
+    int front(); //zwraca wartosc poczatku kolejki
+    int priofront(); //zwraca priorytet poczatku kolejki
 };
 
 //**********************************//
@@ -78,8 +80,19 @@ void Kolejka::push(int priorytet, int wartosc)
 
 }
 
+//ZWRACA WARTOSC POCZATKU KOLEJKI
+int Kolejka::front()
+{
+        if(head) return head->dana; //zwroc wartosc head
+        else return 0;
+}
 
-
+//ZWRACA PRIORYTET POCZATKU KOLEJKI
+int Kolejka::priofront()
+{
+        if(head) return head->priorytet; //zwroc priorytet head
+        else return 0;
+}
 
 
 int main()
@@ -88,6 +101,8 @@ int main()
 
     Kolejka K;
     int priorytet,wartosc;
+    int p,w;
+
     priorytet = 2;
     wartosc = 5;
     K.push(priorytet,wartosc);
@@ -95,6 +110,21 @@ int main()
     if(K.empty()==true) cout<<"pusta"<<endl;
     else cout<<"nie jest pusta"<<endl;
 
+    p=K.priofront();
+    w=K.front();
+    cout<<"Priorytet: "<<p<<endl;
+    cout<<"Wartosc: "<<w<<endl;
+
+    priorytet = 12;
+    wartosc = 1;
+    K.push(priorytet,wartosc);
+
+    p=K.priofront();
+    w=K.front();
+    cout<<"Priorytet: "<<p<<endl;
+    cout<<"Wartosc: "<<w<<endl;
+
+//Funkcje empty,push,front i priofront dzialaja ! :)
 
 
 
@@ -103,4 +133,3 @@ int main()
 	system("PAUSE");
 	return 0;
 }
-
