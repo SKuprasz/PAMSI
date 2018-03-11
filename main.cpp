@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 
+
 using namespace std;
 
 
@@ -11,7 +12,7 @@ struct lista		//elementy listy
 	int dana;
 };
 
-//PRZEROBIÆ NA SZABLON !!
+//PRZEROBIA NA SZABLON !!
 
 class Kolejka		//klasa kolejka
 {
@@ -26,6 +27,7 @@ public:
     void push(int priorytet, int wartosc); //funckja dodaje do kolejki
     int front(); //zwraca wartosc poczatku kolejki
     int priofront(); //zwraca priorytet poczatku kolejki
+    void pop();
 };
 
 //**********************************//
@@ -40,7 +42,7 @@ Kolejka::Kolejka()
 //DESTRUKTOR
 Kolejka::~Kolejka()
 {
- //Pozniej dodam jak napisze pop
+
 }
 
 //SPRAWDZA CZY PUSTA
@@ -94,6 +96,19 @@ int Kolejka::priofront()
         else return 0;
 }
 
+void Kolejka::pop()
+{
+    if(head)
+    {
+      lista * p = head; //adres pierwszego elementu
+      head = head -> next; //odlaczam pierwszy element
+      delete p; //kasuje
+    }
+    else
+    {
+        cout<<"NIE MAM CO USUWAC!"<<endl;
+    }
+}
 
 int main()
 {
@@ -126,9 +141,43 @@ int main()
 
 //Funkcje empty,push,front i priofront dzialaja ! :)
 
+    K.pop();
+    K.pop();
 
+    if(K.empty()==true) cout<<"pusta"<<endl;
+    else cout<<"nie jest pusta"<<endl;
+//Funkcja pop przetestowana - usuwa, a jak nie ma co to wyswietla
+    K.pop();
 
+    priorytet = 12;
+    wartosc = 5;
+    K.push(priorytet,wartosc);
+    priorytet = 10;
+    wartosc = 8;
+    K.push(priorytet,wartosc);
+    priorytet = 22;
+    wartosc = 7;
+    K.push(priorytet,wartosc);
+    priorytet = 30;
+    wartosc = 6;
+    K.push(priorytet,wartosc);
+    priorytet = 15;
+    wartosc = 500;
+    K.push(priorytet,wartosc);
+    priorytet = 41;
+    wartosc = 18;
+    K.push(priorytet,wartosc);
 
+    cout<<endl<<"WYSWIETL KOLEJKE:"<<endl;
+    cout<<"Priorytet:   Wartosc: "<<endl;
+
+    for (int i=0; !K.empty(); i++)
+    {
+        cout<<"   "<<K.priofront()<<"          "<<K.front()<<endl;
+        K.pop();
+    }
+
+//Funkcje przetestowane - dzialaja
 
 	system("PAUSE");
 	return 0;
