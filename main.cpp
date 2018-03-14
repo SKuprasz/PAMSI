@@ -12,8 +12,8 @@ struct lista		//elementy listy
 	int dana;
 };
 
-//PRZEROBIA NA SZABLON !!
 
+template <typename T>
 class Kolejka		//klasa kolejka
 {
 private:
@@ -24,7 +24,7 @@ public:
 	Kolejka();	//konstruktor
 	~Kolejka();	//destruktor
     bool empty(); //funkcja sprawdza czy pusta
-    void push(int priorytet, int wartosc); //funckja dodaje do kolejki
+    void push(T priorytet, T wartosc); //funckja dodaje do kolejki
     int front(); //zwraca wartosc poczatku kolejki
     int priofront(); //zwraca priorytet poczatku kolejki
     void pop();
@@ -34,19 +34,22 @@ public:
 //METODY
 
 //KONSTRUKTOR - TWORZY PUSTA KOLEJKE
-Kolejka::Kolejka()
+template <typename T>
+Kolejka<T>::Kolejka()
 {
 	head = tail = NULL;
 }
 
 //DESTRUKTOR
-Kolejka::~Kolejka()
+template <typename T>
+Kolejka<T>::~Kolejka()
 {
 
 }
 
 //SPRAWDZA CZY PUSTA
-bool Kolejka::empty()
+template <typename T>
+bool Kolejka<T>::empty()
 {
     if(!head)
         return true;
@@ -55,7 +58,8 @@ bool Kolejka::empty()
 }
 
 //DODAJE ELEMENT DO KOLEJKI ZGODNIE Z PRIORYTETEM
-void Kolejka::push(int priorytet, int wartosc)
+template <typename T>
+void Kolejka<T>::push(T priorytet, T wartosc)
 {
 
     lista *p , *r;
@@ -83,20 +87,23 @@ void Kolejka::push(int priorytet, int wartosc)
 }
 
 //ZWRACA WARTOSC POCZATKU KOLEJKI
-int Kolejka::front()
+template <typename T>
+int Kolejka<T>::front()
 {
         if(head) return head->dana; //zwroc wartosc head
         else return 0;
 }
 
 //ZWRACA PRIORYTET POCZATKU KOLEJKI
-int Kolejka::priofront()
+template <typename T>
+int Kolejka<T>::priofront()
 {
         if(head) return head->priorytet; //zwroc priorytet head
         else return 0;
 }
 
-void Kolejka::pop()
+template <typename T>
+void Kolejka<T>::pop()
 {
     if(head)
     {
@@ -114,7 +121,7 @@ int main()
 {
 	cout << "KOLEJKA PRIORYTETOWA" << endl;
 
-    Kolejka K;
+    Kolejka<int> K;
     int priorytet,wartosc;
     int p,w;
 
