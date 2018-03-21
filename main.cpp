@@ -24,10 +24,13 @@ public:
 	Kolejka();	//konstruktor
 	~Kolejka();	//destruktor
     bool empty(); //funkcja sprawdza czy pusta
-    void push(T priorytet, T wartosc); //funckja dodaje do kolejki
+    void push(T priorytet, T wartosc); //funckja dodaje do kolejki zgodnie z priorytetem
     int front(); //zwraca wartosc poczatku kolejki
     int priofront(); //zwraca priorytet poczatku kolejki
     void pop();
+    void wyswietl();
+    void insert(T priorytet, T wartosc); //dodaje do kolejki w sposob nieposortowany
+    void del(); //usuwa najwyzszy priorytet
 };
 
 //**********************************//
@@ -102,6 +105,7 @@ int Kolejka<T>::priofront()
         else return 0;
 }
 
+//USUWA PIERWSZY ELEMENT
 template <typename T>
 void Kolejka<T>::pop()
 {
@@ -117,74 +121,111 @@ void Kolejka<T>::pop()
     }
 }
 
-int main()
+//WYSWIETLA PRIORYTETY KOLEJKI
+template <typename T>
+void Kolejka<T>::wyswietl()
 {
-	cout << "KOLEJKA PRIORYTETOWA" << endl;
 
-    Kolejka<int> K;
-    int priorytet,wartosc;
-    int p,w;
-
-    priorytet = 2;
-    wartosc = 5;
-    K.push(priorytet,wartosc);
-
-    if(K.empty()==true) cout<<"pusta"<<endl;
-    else cout<<"nie jest pusta"<<endl;
-
-    p=K.priofront();
-    w=K.front();
-    cout<<"Priorytet: "<<p<<endl;
-    cout<<"Wartosc: "<<w<<endl;
-
-    priorytet = 12;
-    wartosc = 1;
-    K.push(priorytet,wartosc);
-
-    p=K.priofront();
-    w=K.front();
-    cout<<"Priorytet: "<<p<<endl;
-    cout<<"Wartosc: "<<w<<endl;
-
-//Funkcje empty,push,front i priofront dzialaja ! :)
-
-    K.pop();
-    K.pop();
-
-    if(K.empty()==true) cout<<"pusta"<<endl;
-    else cout<<"nie jest pusta"<<endl;
-//Funkcja pop przetestowana - usuwa, a jak nie ma co to wyswietla
-    K.pop();
-
-    priorytet = 12;
-    wartosc = 5;
-    K.push(priorytet,wartosc);
-    priorytet = 10;
-    wartosc = 8;
-    K.push(priorytet,wartosc);
-    priorytet = 22;
-    wartosc = 7;
-    K.push(priorytet,wartosc);
-    priorytet = 30;
-    wartosc = 6;
-    K.push(priorytet,wartosc);
-    priorytet = 15;
-    wartosc = 500;
-    K.push(priorytet,wartosc);
-    priorytet = 41;
-    wartosc = 18;
-    K.push(priorytet,wartosc);
-
-    cout<<endl<<"WYSWIETL KOLEJKE:"<<endl;
-    cout<<"Priorytet:   Wartosc: "<<endl;
-
-    for (int i=0; !K.empty(); i++)
+    lista *p;
+    p=head;
+    if(head==NULL)
     {
-        cout<<"   "<<K.priofront()<<"          "<<K.front()<<endl;
-        K.pop();
+        cout<<"KOLEJKA JEST PUSTA"<<endl;
+    }
+    else
+    {
+        cout<<"KOLEJKA: "<<endl;
+        while(p!=NULL)
+        {
+
+            cout<<p->priorytet<<" ";
+            p=p->next;
+        }
+            cout<<endl;
     }
 
-//Funkcje przetestowane - dzialaja
+}
+
+//DODAJE ELEMENT DO KOLEJKI W SPOSOB NIEPOSORTOWANY
+template <typename T>
+void Kolejka<T>::insert(T priorytet, T wartosc)
+{
+	lista *p , *r;
+	r = new lista;
+	r->next =NULL;
+	r->priorytet = priorytet;
+	r->dana = wartosc;
+
+	p=head;
+	if (p)
+	{
+		while(p->next) p=p->next;
+		p->next =r;
+	}
+	else
+	{
+		head = r;
+	}
+
+}
+
+//USUWA NAJMNIEJSZY PRIORYTET
+template <typename T>
+void Kolejka<T>::del()
+{
+
+    lista * p, * pmin;
+    pmin = head;
+    if(head)
+        for(p = head->next; p; p = p->next)
+            if(p->priorytet < pmin->priorytet)
+            {
+                pmin=p;
+            }
+        cout<<"PRIORYTET DO USUNECIA: "<<pmin->priorytet<<endl;
+    p = head;
+    while(p->next != pmin) p = p->next;
+    p->next = pmin->next;
+    delete pmin;
+
+    //FUNKCJA DO POPRAWY, WYWALA BLAD NA OSTATNICH TRZECH ELEMENTACH
+}
+
+
+
+int main()
+{
+    Kolejka<int> K;
+    Kolejka<int> P;
+    int i;
+
+    K.push(7,2);
+    K.push(4,1);
+    K.push(8,5);
+    K.push(2,3);
+    K.push(5,1);
+    K.push(3,2);
+    K.push(9,3);
+    K.wyswietl();
+    K.pop();
+    K.wyswietl();
+    for(i=0;!K.empty();i++) K.pop();
+
+    P.insert(7,2);
+    P.insert(4,1);
+    P.insert(8,5);
+    P.insert(2,3);
+    P.insert(5,1);
+    P.insert(3,2);
+    P.insert(9,3);
+
+    P.wyswietl();
+    P.del();
+    P.del();
+    P.del();
+    P.del();
+    P.wyswietl();
+
 
 	system("PAUSE");
 	return 0;
