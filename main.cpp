@@ -113,6 +113,7 @@ void Kolejka<T>::pop()
     {
       lista * p = head; //adres pierwszego elementu
       head = head -> next; //odlaczam pierwszy element
+      cout<<"PRIORYTET DO USUNIECIA: "<<p->priorytet<<endl;
       delete p; //kasuje
     }
     else
@@ -173,22 +174,32 @@ void Kolejka<T>::insert(T priorytet, T wartosc)
 template <typename T>
 void Kolejka<T>::del()
 {
-
     lista * p, * pmin;
     pmin = head;
-    if(head)
+    if(empty()) cout<<"KOLEJKA PUSTA!"<<endl;
+    else
+    {
+        if(head)
         for(p = head->next; p; p = p->next)
             if(p->priorytet < pmin->priorytet)
             {
                 pmin=p;
             }
         cout<<"PRIORYTET DO USUNECIA: "<<pmin->priorytet<<endl;
-    p = head;
-    while(p->next != pmin) p = p->next;
-    p->next = pmin->next;
-    delete pmin;
 
-    //FUNKCJA DO POPRAWY, WYWALA BLAD NA OSTATNICH TRZECH ELEMENTACH
+        p = head;
+        if(p==pmin || pmin==tail )
+        {
+            head=head->next;
+            delete p;
+        }
+        else
+        {
+            while(p->next != pmin) p = p->next;
+            p->next = pmin->next;
+            delete pmin;
+        }
+    }
 }
 
 
@@ -207,9 +218,10 @@ int main()
     K.push(3,2);
     K.push(9,3);
     K.wyswietl();
-    K.pop();
-    K.wyswietl();
     for(i=0;!K.empty();i++) K.pop();
+    K.wyswietl();
+    cout<<endl<<endl;
+
 
     P.insert(7,2);
     P.insert(4,1);
@@ -220,10 +232,7 @@ int main()
     P.insert(9,3);
 
     P.wyswietl();
-    P.del();
-    P.del();
-    P.del();
-    P.del();
+    for(i=0;!P.empty();i++) P.del();
     P.wyswietl();
 
 
