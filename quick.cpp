@@ -37,7 +37,7 @@ int main()
 {
     cout<<"SORTOWANIE SZYBKIE - QUICKSORT"<<endl;
 
-    //int rozmiary[5] = { 100, 200, 300, 400, 500}; //przykladowa tablica do testow na losowych wartosciach
+    //int rozmiary[5] = { 10000, 20000, 30000, 40000, 50000}; //przykladowa tablica do testow na losowych wartosciach
     int rozmiary[5] = { 10000, 50000, 100000, 500000, 1000000}; //rozmiary tablic
 
     double czas;
@@ -45,41 +45,45 @@ int main()
 
     start = clock();
 
-    for (int k=0;k<5;k++)               //na liczbe tablic
+    for (int k=0;k<5;k++)               //na liczbe roznych tablic po kolei
     {
-        cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
-        int *tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
+        //cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
 
-        /***************PRZYPADKI*****************/
+        for (int j=0;j<100;j++)         //dla stu tablic
+        {
+            int *tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
 
-        //LOSOWE
-        /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
-            tab[i]=rand()%100+1; //na razie dla czytelnosci zakres do 100*/
+            /***************PRZYPADKI*****************/
 
-        //ODWROTNA KOLEJNOSC
-        /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
-            tab[i]=rozmiary[k] - i;*/
+            //LOSOWE
+            /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
+                tab[i]=rand(); // dla czytelnosci zakres zmienic do 100, rand()%100+1; */
 
-        //PROCENT POSORTOWANIA
-        for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
-            tab[i]=i;
-        for(int i=procent*rozmiary[k]/100; i<rozmiary[k]; i++)
-            tab[i]=rand();                          //wpisanie do reszty elementow
-        /***************************************/
+            //ODWROTNA KOLEJNOSC
+            /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
+                tab[i]=rozmiary[k] - i;*/
 
-        //wyswietlanie tablicy nieposortowanej
-        /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
-        for (int i = 0; i<rozmiary[k]; i++)
-        cout << tab[i] << " ";
-        cout<<endl<<endl;*/
+            //PROCENT POSORTOWANIA
+            for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
+                tab[i]=i;
+            for(int i=procent*rozmiary[k]/100; i<rozmiary[k]; i++)
+                tab[i]=rand();                          //wpisanie do reszty elementow
+            /***************************************/
 
-        quicksort(tab,0,rozmiary[k]-1); // wywolanie quicksorta
+            //wyswietlanie tablicy nieposortowanej
+            /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
+            for (int i = 0; i<rozmiary[k]; i++)
+            cout << tab[i] << " ";
+            cout<<endl<<endl;*/
 
-        //wyswietlanie tablicy posortowanej
-        /*cout<<"TABLICA POSORTOWANA"<<endl;
-        for (int i = 0; i<rozmiary[k]; i++)
-        cout << tab[i] << " ";
-        cout<<endl<<endl;*/
+            quicksort(tab,0,rozmiary[k]-1); // wywolanie quicksorta
+
+            //wyswietlanie tablicy posortowanej
+            /*cout<<"TABLICA POSORTOWANA"<<endl;
+            for (int i = 0; i<rozmiary[k]; i++)
+            cout << tab[i] << " ";
+            cout<<endl<<endl;*/
+        }
 
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
