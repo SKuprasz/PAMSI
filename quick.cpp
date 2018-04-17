@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <time.h>
 
+#define procent 25 //procent poczatkowo posortowanych danych
+
 using namespace std;
 
 void quicksort(int tab[], int left, int right)
@@ -35,7 +37,8 @@ int main()
 {
     cout<<"SORTOWANIE SZYBKIE - QUICKSORT"<<endl;
 
-    int rozmiary[5] = { 10, 20, 30, 40, 50}; //przykladowa tablica do testow na losowych wartosciach
+    //int rozmiary[5] = { 100, 200, 300, 400, 500}; //przykladowa tablica do testow na losowych wartosciach
+    int rozmiary[5] = { 10000, 50000, 100000, 500000, 1000000}; //rozmiary tablic
 
     double czas;
     clock_t start, stop;
@@ -47,22 +50,36 @@ int main()
         cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
         int *tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
 
-        for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
-        tab[i]=rand()%100+1; //dla czytelnosci zakres do 100
+        /***************PRZYPADKI*****************/
+
+        //LOSOWE
+        /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
+            tab[i]=rand()%100+1; //na razie dla czytelnosci zakres do 100*/
+
+        //ODWROTNA KOLEJNOSC
+        /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
+            tab[i]=rozmiary[k] - i;*/
+
+        //PROCENT POSORTOWANIA
+        for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
+            tab[i]=i;
+        for(int i=procent*rozmiary[k]/100; i<rozmiary[k]; i++)
+            tab[i]=rand();                          //wpisanie do reszty elementow
+        /***************************************/
 
         //wyswietlanie tablicy nieposortowanej
-        cout<<"TABLICA NIEPOSORTOWANA"<<endl;
+        /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
         for (int i = 0; i<rozmiary[k]; i++)
         cout << tab[i] << " ";
-        cout<<endl<<endl;
+        cout<<endl<<endl;*/
 
         quicksort(tab,0,rozmiary[k]-1); // wywolanie quicksorta
 
         //wyswietlanie tablicy posortowanej
-        cout<<"TABLICA POSORTOWANA"<<endl;
+        /*cout<<"TABLICA POSORTOWANA"<<endl;
         for (int i = 0; i<rozmiary[k]; i++)
         cout << tab[i] << " ";
-        cout<<endl<<endl;
+        cout<<endl<<endl;*/
 
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
@@ -74,3 +91,4 @@ int main()
     system("pause");
     return 0;
 }
+
