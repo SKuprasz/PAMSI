@@ -6,8 +6,39 @@
 
 using namespace std;
 
+int *tmp; //tab pomocnicza
 
-//FUNKCJE MERGESORTA
+void merg(int tab[], int left, int center, int right) //funkcja scalajaca
+{
+    int i;
+    i = left;        //lewy
+    int j;
+    j = center+1;    //srodek+1
+
+    for(int i=left; i<=right; i++)
+        tmp[i] = tab[i];            //kopuje do tab pomocniczej
+
+    //scalanie z tab pomocniczej i zapisanie
+    for (int k = left; k <= right; k++)
+	if (i <= center)
+	if (j <= right)
+	if (tmp[j]<tmp[i])
+		tab[k] = tmp[j++];
+	else tab[k] = tmp[i++];
+	else tab[k] = tmp[i++];
+	else tab[k] = tmp[j++];
+}
+
+void mergesort(int tab[], int left, int right)
+{
+    int center = (right + left) / 2;
+    if (right <= left) return;              //gdy mamy jeden element, to jest on juz posortowany
+
+	mergesort(tab, left, center);           //tablica po lewej stronie
+	mergesort(tab, center + 1, right);      //tablica po prawej stronie
+	merg(tab, left, center, right);         //scalamy dwie juz posortowane tablice
+}
+
 
 int main()
 {
@@ -24,7 +55,9 @@ int main()
     for (int k=0;k<5;k++)               //na liczbe tablic
     {
         cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
-        int *tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
+        int *tab;
+        tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
+        tmp = new int[rozmiary[k]];    //tablica pomocnicza tmp
 
         /***************PRZYPADKI*****************/
 
@@ -45,29 +78,24 @@ int main()
         /***************************************/
 
         //wyswietlanie tablicy nieposortowanej
-        /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
+        cout<<"TABLICA NIEPOSORTOWANA"<<endl;
         for (int i = 0; i<rozmiary[k]; i++)
         cout << tab[i] << " ";
-        cout<<endl<<endl;*/
+        cout<<endl<<endl;
 
-        //mergesort(,,); // wywolanie mergesorta
+        mergesort(tab, 0, rozmiary[k] - 1); // wywolanie mergesorta
 
         //wyswietlanie tablicy posortowanej
-        /*cout<<"TABLICA POSORTOWANA"<<endl;
+        cout<<"TABLICA POSORTOWANA"<<endl;
         for (int i = 0; i<rozmiary[k]; i++)
         cout << tab[i] << " ";
-        cout<<endl<<endl;*/
+        cout<<endl<<endl;
 
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
-        //cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
+        cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
 
     }
-
-
-
-
-
 
 
     system("pause");
