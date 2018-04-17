@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <time.h>
 
 using namespace std;
 
@@ -13,16 +14,16 @@ void quicksort(int tab[], int left, int right)
     do
 	{
 		while (tab[i]<pivot)        //szukamy elementu wiekszego niz piwota
-			i++;
+            i++;
 		while (tab[j]>pivot)        //szukamy elementu mniejszego od piwota
             j--;
-        if (i <= j)                 //jesli liczniki sie nie minely to zamien
+        if(i <= j)                 //jesli liczniki sie nie minely to zamien
 		{
 			swap(tab[i], tab[j]);   //swap zamienia wartosci elementow tablic
 			i++;
 			j--;
 		}
-	} while (i <= j);
+	} while(i <= j);
 
 	if(left<j) quicksort(tab, left, j);     //wywolanie quicksorta dla pierwszej czesci tablicy
 	if(right>i) quicksort(tab, i, right);   //wywolanie quicksorta dla drugiej czesci tablicy
@@ -35,6 +36,12 @@ int main()
     cout<<"SORTOWANIE SZYBKIE - QUICKSORT"<<endl;
 
     int rozmiary[5] = { 10, 20, 30, 40, 50}; //przykladowa tablica do testow na losowych wartosciach
+
+    double czas;
+    clock_t start, stop;
+
+    start = clock();
+
     for (int k=0;k<5;k++)               //na liczbe tablic
     {
         cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
@@ -56,9 +63,12 @@ int main()
         for (int i = 0; i<rozmiary[k]; i++)
         cout << tab[i] << " ";
         cout<<endl<<endl;
+
+        stop = clock();
+        czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
+        cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
+
     }
-
-
 
 
     system("pause");
