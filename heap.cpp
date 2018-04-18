@@ -6,8 +6,62 @@
 
 using namespace std;
 
+/*Funkcja ktora przesuwa elementy do kiedy wlasciwosci kopca nie zostana przywrocone
+jesli wartosc macierzysta jest mniejsza to jest zmieniana na najwieksze dziecko, mov od move-przesun*/
 
-//FUNCKJE HEAPSORTA
+void mov(int tab[], int size, int l)
+{
+	int i, j, x;
+	i = l;
+	j = 2 * i + 1;
+	x = tab[i];
+	while (j < size)
+	{
+		if (j <size - 1)
+		if (tab[j] < tab[j + 1])
+			++j;
+		if (x >= tab[j])
+			break;
+		tab[i] = tab[j];
+		i = j;
+		j = 2 * i + 1;
+
+	}
+	tab[i] = x;
+}
+
+
+/*Funkcja tworzaca kopiec.
+tab[] - tablica, gdzie tworzony jest kopiec
+size - rozmiar tablicy*/
+
+
+void build_heap(int tab[], int size)
+{
+	int l = size / 2;
+	while (l)
+	{
+		--l;
+		mov(tab, size, l);
+	}
+}
+
+//funkcja sortujaca kopiec
+void heapsort(int tab[], int size)
+{
+	int r = size;
+	build_heap(tab, size);
+
+	while (r > 1)
+	{
+		int tmp = tab[0];
+		--r;
+		tab[0] = tab[r];
+		tab[r] = tmp;
+		mov(tab, r, 0);
+	}
+}
+
 
 int main()
 {
@@ -46,18 +100,18 @@ int main()
             /***************************************/
 
             //wyswietlanie tablicy nieposortowanej
-            /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
+            cout<<"TABLICA NIEPOSORTOWANA"<<endl;
             for (int i = 0; i<rozmiary[k]; i++)
             cout << tab[i] << " ";
-            cout<<endl<<endl;*/
+            cout<<endl<<endl;
 
-            //heapsort(tab,0,rozmiary[k]-1); // wywolanie quicksorta
+            heapsort(tab,rozmiary[k]); // wywolanie heapsorta
 
             //wyswietlanie tablicy posortowanej
-            /*cout<<"TABLICA POSORTOWANA"<<endl;
+            cout<<"TABLICA POSORTOWANA"<<endl;
             for (int i = 0; i<rozmiary[k]; i++)
             cout << tab[i] << " ";
-            cout<<endl<<endl;*/
+            cout<<endl<<endl;
 
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
