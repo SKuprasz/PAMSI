@@ -67,8 +67,8 @@ int main()
 {
     cout<<"SORTOWANIE PRZEZ KOPCOWANIE - HEAPSORT"<<endl;
 
-    int rozmiary[5] = { 10, 20, 30, 40, 50}; //przykladowa tablica do testow na losowych wartosciach
-    //int rozmiary[5] = { 10000, 50000, 100000, 500000, 1000000}; //rozmiary tablic
+    //int rozmiary[5] = { 10, 20, 30, 40, 50}; //przykladowa tablica do testow na losowych wartosciach
+    int rozmiary[5] = { 10000, 50000, 100000, 500000, 1000000}; //rozmiary tablic
 
     double czas;
     clock_t start, stop;
@@ -79,7 +79,8 @@ int main()
     {
         cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
 
-
+        for(int j=0;j<100;j++)
+        {
             int *tab = new int[rozmiary[k]];    //utworzenie dynamicznej tablicy, przygotowanie do dodania 5 tablic o roznej ilosci elementow
 
             /***************PRZYPADKI*****************/
@@ -100,18 +101,19 @@ int main()
             /***************************************/
 
             //wyswietlanie tablicy nieposortowanej
-            cout<<"TABLICA NIEPOSORTOWANA"<<endl;
+            /*cout<<"TABLICA NIEPOSORTOWANA"<<endl;
             for (int i = 0; i<rozmiary[k]; i++)
             cout << tab[i] << " ";
-            cout<<endl<<endl;
+            cout<<endl<<endl;*/
 
             heapsort(tab,rozmiary[k]); // wywolanie heapsorta
 
             //wyswietlanie tablicy posortowanej
-            cout<<"TABLICA POSORTOWANA"<<endl;
+            /*cout<<"TABLICA POSORTOWANA"<<endl;
             for (int i = 0; i<rozmiary[k]; i++)
             cout << tab[i] << " ";
-            cout<<endl<<endl;
+            cout<<endl<<endl;*/
+        }
 
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
