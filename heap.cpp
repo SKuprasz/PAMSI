@@ -77,7 +77,7 @@ int main()
 
     for (int k=0;k<5;k++)               //na liczbe roznych tablic po kolei
     {
-        cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
+        //cout << "Sortowanie dla tablicy "<<rozmiary[k]<<" elementow:"<<endl<<endl; //wyswietlenie jaka to tablica
 
         for(int j=0;j<100;j++)
         {
@@ -86,18 +86,18 @@ int main()
             /***************PRZYPADKI*****************/
 
             //LOSOWE
-            for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
-                tab[i]=rand()%100+1; // dla czytelnosci zakres do 100
+            /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
+                tab[i]=rand(); // zakres*/
 
             //ODWROTNA KOLEJNOSC
             /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
                 tab[i]=rozmiary[k] - i;*/
 
             //PROCENT POSORTOWANIA
-            /*for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
+            for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
                 tab[i]=i;
             for(int i=procent*rozmiary[k]/100; i<rozmiary[k]; i++)
-                tab[i]=rand();                          //wpisanie do reszty elementow*/
+                tab[i]=rand();                          //wpisanie do reszty elementow
             /***************************************/
 
             //wyswietlanie tablicy nieposortowanej
@@ -118,6 +118,7 @@ int main()
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
         cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
+        cout << "Czas sredni: "<<czas/100<<".ms"<<endl;
 
     }
 
