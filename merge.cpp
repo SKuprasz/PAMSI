@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <time.h>
 
-#define procent 25
+#define procent 25 //procent posortowanych danych
 
 using namespace std;
 
@@ -65,12 +65,12 @@ int main()
              /***************PRZYPADKI*****************/
 
             //LOSOWE
-            for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
-                tab[i]=rand(); //mozna dodac zakres
+            /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
+                tab[i]=rand(); //mozna dodac zakres*/
 
             //ODWROTNA KOLEJNOSC
-            /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
-                tab[i]=rozmiary[k] - i;*/
+            for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
+                tab[i]=rozmiary[k] - i;
 
             //PROCENT POSORTOWANIA
             /*for(int i=0; i<procent*rozmiary[k]/100; i++)    //procent posortowania
@@ -98,11 +98,11 @@ int main()
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
         cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
-
+		cout << "Czas sredni: "<<czas/100<<".ms"<<endl;
+		
     }
 
 
     system("pause");
     return 0;
 }
-
