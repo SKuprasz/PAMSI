@@ -57,7 +57,7 @@ int main()
 
             //LOSOWE
             /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci losowych do tablicy
-                tab[i]=rand(); // dla czytelnosci zakres zmienic do 100, rand()%100+1; */
+                tab[i]=rand(); // dla czytelnosci zakres zmienic do 100, rand()%100+1;*/
 
             //ODWROTNA KOLEJNOSC
             /*for(int i=0; i<rozmiary[k]; i++)    //wczytanie wartosci w odwrotnej kolejnosci do tablicy
@@ -88,11 +88,10 @@ int main()
         stop = clock();
         czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
         cout << "Czas sortowania dla "<<rozmiary[k]<<" elementow: "<<czas<<".ms"<<endl<<endl; //czas sortowania w ms
+        cout << "Czas sredni: "<<czas/100<<".ms"<<endl;
 
     }
-
 
     system("pause");
     return 0;
 }
-
