@@ -71,7 +71,7 @@ void Macierz::wyswietl()
 class Lista
 {
 public:
-    struct Element
+    struct Element      //element listy
     {
         int wierzcholek;
         int waga;
@@ -93,12 +93,31 @@ public:
 
 Lista::Lista(int liczbaWierzcholkow)
 {
+    this->liczbaWierzcholkow = liczbaWierzcholkow;
+    lista = new Element*[liczbaWierzcholkow]; //tworzy tabice list sasiedztwa
 
+    for(int i=0;i<liczbaWierzcholkow;i++)
+    {
+        lista[i] = NULL; //wypelnia tablice nullem
+    }
 }
 
 Lista::~Lista()
 {
-
+    for(int i=0; i<liczbaWierzcholkow;i++)
+    {
+        if(lista[i] != NULL) //jesli nie jest null
+        {
+            Element *pozycja = lista[i]; //ustawia na liscie
+            do
+            {
+                Element *next = pozycja->nastepny;
+                delete pozycja; //usuwa pozycje
+                pozycja = next;
+            } while(pozycja != NULL);
+        }
+    }
+    delete[] lista;
 }
 
 int Lista::LiczbaWierzcholkow()
@@ -136,12 +155,41 @@ int Lista::zwrocWaga(int v1,int v2)
 
 void Lista::dodajWierzcholek(int v1, int v2, int waga)
 {
+    if(lista[v1] == NULL)
+    {
+        lista[v1] = new Element;
+        lista[v1] -> wierzcholek = v2;
+        lista[v1] -> waga = waga;
+        lista[v1] -> nastepny = NULL;
+    }
+    else
+    {
+        //bool powtorzenie = false;
+        Element *next = lista[v1];
+        Element *buf = NULL;
+        do
+        {
+            buf = next;
+            next = next->nastepny;
 
+            if(buf->wierzcholek == v2)
+            {
+                //powtorzenie = true;
+                break;
+            }
+        } while(next != NULL);
+
+        Element *nowy = new Element;
+        nowy->wierzcholek = v2;
+        nowy->waga = waga;
+        nowy->nastepny = NULL;
+        buf->nastepny = nowy;
+    }
 }
 
 void Lista::wyswietl()
 {
-    cout<<"Reprezentacja listty sasiedztwa"<<endl;
+    cout<<"Reprezentacja listy sasiedztwa"<<endl;
     for(int i=0; i<liczbaWierzcholkow;i++)
     {
         if(lista[i] != NULL)
@@ -165,10 +213,11 @@ void Lista::wyswietl()
 int main()
 {
     Macierz(5).wyswietl();
-
+    Lista(5).wyswietl();
 
 
 
 
     return 0;
 }
+
