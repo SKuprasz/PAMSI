@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -14,7 +16,7 @@ public:
     int zwrocWaga(int v1,int v2);   //zwraca wage
     void dodajWierzcholek(int v1, int v2, int waga); //dodaje wierzhcolek
     void wyswietl();    //wyswietla
-
+    void wypelnij(Macierz &macierz, int g); //wypelnienie dana gestoscia
 };
 
 Macierz::Macierz(int liczbaWierzcholkow)
@@ -67,6 +69,43 @@ void Macierz::wyswietl()
     }
 }
 
+void Macierz::wypelnij(Macierz &macierz, int g)
+{
+    //gestosc procentowa
+    float gestosc = (float)g / 100;
+    //maksymalna ilosc krawedzi
+    int maxliczbaKrawedzi = gestosc*((macierz.liczbaWierzcholkow*(macierz.liczbaWierzcholkow - 1)) / 2);
+    int licznik = 0; //licznik
+
+    for(int i=0; i<macierz.liczbaWierzcholkow; i++)
+    {
+        //czy wszystkie wierzcholki polaczone
+        int losowaWaga = (rand()%49+1); //losowa 1-50
+
+        macierz.dodajWierzcholek(i, (i+1)%macierz.liczbaWierzcholkow, losowaWaga);
+        licznik++;
+    }
+
+    while(licznik < maxliczbaKrawedzi)
+    {
+        //pozostale krawedzie
+        int losowaWaga, losowyV1, losowyV2;
+        do
+        {
+            losowaWaga = (rand()%49 +1);
+            losowyV1 = rand() % macierz.liczbaWierzcholkow;
+            losowyV2 = rand() % macierz.liczbaWierzcholkow;
+            //w przypadku wylosowania takich samych v1,v2
+            if(losowyV1 == losowyV2) losowyV2 = rand() % macierz.liczbaWierzcholkow;
+        }
+        while(macierz.zwrocWaga(losowyV1,losowyV2) != 0);
+        //jezeli krawedz juz nie istniala to dodajemy i zwiekszamy liczbik
+        macierz.dodajWierzcholek(losowyV1, losowyV2, losowaWaga);
+        licznik++;
+    }
+    macierz.wyswietl(); //wyswietl wynik wypelnienia
+}
+
 
 class Lista
 {
@@ -87,7 +126,7 @@ public:
     int zwrocWaga(int v1,int v2);   //zwraca wage
     void dodajWierzcholek(int v1, int v2, int waga); //dodaje wierzhcolek
     void wyswietl();    //wyswietla
-
+    void wypelnij(Lista &lista, int g); //wypelnienie dana gestoscia
 
 };
 
@@ -208,16 +247,89 @@ void Lista::wyswietl()
     }
 }
 
+void Lista::wypelnij(Lista &lista, int g)
+{
+    //gestosc procentowa
+    float gestosc = (float)g / 100;
+    //maksymalna ilosc krawedzi
+    int maxliczbaKrawedzi = gestosc*((lista.liczbaWierzcholkow*(lista.liczbaWierzcholkow - 1)) / 2);
+    int licznik = 0; //licznik
+
+    for(int i=0; i<lista.liczbaWierzcholkow; i++)
+    {
+        //czy wszystkie wierzcholki polaczone
+        int losowaWaga = (rand()%49+1); //losowa 1-50
+
+        lista.dodajWierzcholek(i, (i+1)%lista.liczbaWierzcholkow, losowaWaga);
+        licznik++;
+    }
+
+    while(licznik < maxliczbaKrawedzi)
+    {
+        //pozostale krawedzie
+        int losowaWaga, losowyV1, losowyV2;
+        do
+        {
+            losowaWaga = (rand()%49 +1);
+            losowyV1 = rand() % lista.liczbaWierzcholkow;
+            losowyV2 = rand() % lista.liczbaWierzcholkow;
+            //w przypadku wylosowania takich samych v1,v2
+            if(losowyV1 == losowyV2) losowyV2 = rand() % lista.liczbaWierzcholkow;
+        }
+        while(lista.zwrocWaga(losowyV1,losowyV2) != 0);
+        //jezeli krawedz juz nie istniala to dodajemy i zwiekszamy liczbik
+        lista.dodajWierzcholek(losowyV1, losowyV2, losowaWaga);
+        licznik++;
+    }
+    lista.wyswietl(); //wyswietl wynik wypelnienia
+}
+
+
 
 
 int main()
 {
-    Macierz(5).wyswietl();
-    Lista(5).wyswietl();
 
+   /* Macierz *m = new Macierz(3);
+    m->dodajWierzcholek(0,1,5);
+    m->dodajWierzcholek(0,2,6);
+    m->dodajWierzcholek(1,0,2);
+    m->dodajWierzcholek(1,2,5);
+    m->dodajWierzcholek(2,0,3);
+    m->dodajWierzcholek(2,1,9);
+    m->wyswietl();*/
+
+    Lista *l = new Lista(3);
+    l->dodajWierzcholek(0,1,5);
+    l->dodajWierzcholek(0,2,6);
+    l->dodajWierzcholek(1,0,2);
+    l->dodajWierzcholek(1,2,5);
+    l->dodajWierzcholek(2,0,3);
+    l->dodajWierzcholek(2,1,9);
+    l->dodajWierzcholek(0,0,0);
+    l->dodajWierzcholek(1,1,0);
+    l->dodajWierzcholek(2,2,0);
+    l->wyswietl();
+
+    int lwierzcholkow,g;
+
+    cout << "Podaj ilosc wierzcholkow: ";
+    cin >> lwierzcholkow;
+    cout << endl << "Podaj gestosc w %: ";
+    cin >> g;
+    Macierz *macierz = NULL;
+    macierz = new Macierz(lwierzcholkow);
+    macierz->wypelnij(*macierz, g);
+
+    cout << "Podaj ilosc wierzcholkow: ";
+    cin >> lwierzcholkow;
+    cout << endl << "Podaj gestosc w %: ";
+    cin >> g;
+    Lista *lista = NULL;
+    lista = new Lista(lwierzcholkow);
+    lista->wypelnij(*lista, g);
 
 
 
     return 0;
 }
-
