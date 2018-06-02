@@ -38,6 +38,7 @@ public:
 
 	void dodaj(int indeks, int waga);
 	void wypisz();
+    void wypisz_do_pliku(std::ofstream& p);
 
 };
 
@@ -51,7 +52,7 @@ public:
 	graf_lista(int s): v(s){list = new lista*[s];}
 
 	void wypisz();
-
+    void wypisz_do_pliku(std::ofstream& p);
 
 };
 
@@ -67,8 +68,20 @@ public:
 
 	void wyczysc();				// wyzerowanie macierzy
 	void wypisz();
+    void wypisz_do_pliku(std::ofstream& p);
 
 };
+
+
+void lista::wypisz_do_pliku(ofstream& p)
+{
+	wierzcholek *tmp = w;
+	while(tmp!=NULL)
+	{
+		p << " -> " << tmp->indeks << " = " << tmp->waga << " ";
+		tmp=tmp->n;
+	}
+}
 
 graf_macierz::graf_macierz()
 {
@@ -124,6 +137,19 @@ void graf_macierz::wyczysc()
 }
 
 
+void graf_macierz::wypisz_do_pliku(ofstream& p)
+{
+	p << "Macierz sasiedztwa: " << endl << endl;
+    for (int i=0; i<v; i++ )
+	{
+        for (int j=0; j<v; j++ )
+            p << macierz_wag[i][j]<<" ";
+		p << endl;
+	}
+	p << endl;
+}
+
+
 
 void lista::dodaj(int indeks, int waga)
 {
@@ -156,7 +182,17 @@ void graf_lista::wypisz()
 	cout << endl;
 }
 
+void graf_lista::wypisz_do_pliku(ofstream& p)
+{
+	p << "Lista sasiedztwa: " << endl;
+	for(int i=0;i<v;i++)
+	{
+		p<<endl<<i;
+		list[i]->wypisz_do_pliku(p);
+	}
 
+	p << endl << endl;
+}
 
 
 
@@ -170,5 +206,6 @@ int main()
 
     return 0;
 }
+
 
 
