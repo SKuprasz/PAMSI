@@ -53,6 +53,7 @@ public:
 
 	void wypisz();
     void wypisz_do_pliku(std::ofstream& p);
+    void konwertuj(int **M); //konwersja mecierz->lista
 
 };
 
@@ -69,6 +70,7 @@ public:
 	void wyczysc();				// wyzerowanie macierzy
 	void wypisz();
     void wypisz_do_pliku(std::ofstream& p);
+    void wylosuj(int wsp); //generowanie losowych macierzy do algorytmow pr i krus
 
 };
 
@@ -150,6 +152,46 @@ void graf_macierz::wypisz_do_pliku(ofstream& p)
 }
 
 
+void graf_macierz::wylosuj(int wsp)
+{
+	long long int suma = 0;
+	int k,l;
+	srand((int)time(NULL));		// zainicjowanie generatora liczb pseudolosowych
+
+	for (int i=0; i< v-1; i++)		// sumujemy wszystkie wierzcholki
+		suma += i;
+
+	suma = (long long int) (suma * wsp/100);				// zmienna potrzebna do okreslania gestosci grafu
+
+	for(k = 0; k < v; k++)
+	{
+		for(l = k; l < v; l++)
+		{
+			if(l == (k+1))
+				macierz_wag[k][l] = macierz_wag[l][k] = (rand()%MAX)+1;		// generujemy najprostszy graf bez petli
+		}
+	}
+
+	int m = 0;
+	while(m < suma)							// w zaleznosci od wspolczynnika
+	{
+
+		k = rand()%v;							// losowanie wierzcholka
+		l = rand()%v;
+
+		if(macierz_wag[k][l] == 0 && k != l)
+		{
+
+			macierz_wag[k][l] = macierz_wag[l][k] = (rand()%MAX)+1;			// dodawanie "lisci" do grafu
+			m++;
+		}
+	}
+}
+
+
+/*************************************************************************************/
+
+
 
 void lista::dodaj(int indeks, int waga)
 {
@@ -170,6 +212,10 @@ void lista::wypisz()
 		tmp=tmp->n;
 	}
 }
+
+
+/*************************************************************************************/
+
 
 void graf_lista::wypisz()
 {
@@ -194,14 +240,33 @@ void graf_lista::wypisz_do_pliku(ofstream& p)
 	p << endl << endl;
 }
 
+void graf_lista::konwertuj(int **M)
+{
+	for(int i=0;i<v;i++)
+	{
+		list[i] = new lista;
+		list[i]->w = NULL;
+	}
 
+	for(int i=0;i<v;i++)
+	{
+		for(int j=i;j<v;j++)
+		{
+			if(M[i][j]!=0)
+			{
+				list[i]->dodaj(j, M[i][j]);
+				list[j]->dodaj(i, M[i][j]);
+			}
+		}
+	}
+}
 
 
 
 int main()
 {
 
-
+    
 
 
     return 0;
