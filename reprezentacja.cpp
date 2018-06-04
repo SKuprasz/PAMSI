@@ -1,3 +1,6 @@
+#ifndef STRUTURY_H_INCLUDED
+#define STRUTURY_H_INCLUDED
+
 #include <iostream>
 #include <math.h>
 #include <cstdlib>
@@ -216,32 +219,5 @@ int Lista_sasiedztwa::Wezel(int const &a, int const &b) const
 }
 
 
-
-
-
-int main()
-{
-
-    Macierz *m = new Macierz(3);
-    m->Dodaj_krawedz(1,2,5);
-    m->Dodaj_krawedz(0,2,6);
-    m->Dodaj_krawedz(0,1,2);
-
-    m->Wypisz();
-
-    cout<<endl<<endl;
-
-    Lista_sasiedztwa *l = new Lista_sasiedztwa(3);
-    l->Dodaj_krawedz(1,2,5);
-    l->Dodaj_krawedz(0,2,6);
-    l->Dodaj_krawedz(0,1,2);
-
-    l->Wypisz();
-
-
-
-
-
-    return 0;
-}
+#endif // STRUTURY_H_INCLUDED
 
