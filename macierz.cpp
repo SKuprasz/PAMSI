@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include <cstdlib>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -8,281 +10,211 @@ class Macierz
 {
 private:
     int **macierz;
-    int liczbaWierzcholkow;
+    int L_wezlow;
 public:
-    Macierz(int liczbaWierzcholkow); //konstruktor
+    Macierz(int rozmiar); //konstruktory
+    Macierz(const Macierz &M);
     ~Macierz();                     //destruktor
-    int LiczbaWierzcholkow();       //zwraca liczbe wierzcholkow
-    int zwrocWaga(int v1,int v2);   //zwraca wage
-    void dodajWierzcholek(int v1, int v2, int waga); //dodaje wierzhcolek
-    void wyswietl();    //wyswietla
-    void wypelnij(Macierz &macierz, int g); //wypelnienie dana gestoscia
+
+    void Dodaj_krawedz(int const &a, int const &b, int const &waga); //dodaje krawedz
+    void Wypisz(); //wypisuje
+    int Rozmiar (int const &i) const; //zwraca iczbe wezlow
+    int Rozmiar () const;
+    int Waga  (int const &a, int const &b) const; //zwraca wage
+    int Wezel (int const &a, int const & b) const; //zwraca b , wezel
 };
 
-Macierz::Macierz(int liczbaWierzcholkow)
-{
-    this->liczbaWierzcholkow = liczbaWierzcholkow;
-    macierz = new int*[liczbaWierzcholkow]; //tworzy tablice
-
-    for (int i=0;i<liczbaWierzcholkow;i++)
+ Macierz::Macierz(int rozmiar)
+  {
+    macierz=new int*[rozmiar+1];
+    L_wezlow=rozmiar;
+    for (int i = 0; i <= rozmiar; i++)
     {
-        macierz[i] = new int[liczbaWierzcholkow]; //tworzy wiersze
-
-        for(int j=0;j<liczbaWierzcholkow;j++)
-            macierz[i][j] = 0; //wypelnienie macierzy zerami
+      macierz[i] = new int[rozmiar+1];
+      for (int j = 0; j <= rozmiar; j++)
+        macierz[i][j] = 0;
     }
-}
+  }
 
-Macierz::~Macierz()
-{
-    //usuwa macierz
-    for(int i=0;i<liczbaWierzcholkow;i++) delete[] macierz;
-
-    delete macierz;
-}
-
-int Macierz::LiczbaWierzcholkow()
-{
-    return liczbaWierzcholkow; //zwraca liczbe wierzcholkow
-}
-
-int Macierz::zwrocWaga(int v1, int v2)
-{
-    return macierz[v1][v2]; //zwraca wage
-}
-
-void Macierz::dodajWierzcholek(int v1,int v2, int waga)
-{
-    macierz[v1][v2] = waga; //dodaje wage
-}
-
-void Macierz::wyswietl()
-{
-    cout<<"Reprezentacja macierzy sasiedztwa"<<endl;
-    for (int i=0;i<liczbaWierzcholkow;i++)
+  Macierz::Macierz(const Macierz &M)
+  {
+    L_wezlow = M.Rozmiar(0);
+    macierz = new int*[L_wezlow + 1];
+    for (int i = 0; i <= L_wezlow; i++)
     {
-        for(int j=0;j<liczbaWierzcholkow;j++)
-        {
-            cout<<macierz[i][j]<<'\t';
-        }
-        cout<<endl;
+      macierz[i] = new int[L_wezlow + 1];
+      for (int j = 0; j <= L_wezlow; j++)
+        macierz[i][j] = M.Waga(i,j);
     }
+  }
+
+  Macierz::~Macierz()
+  {
+    if (L_wezlow!=0)
+	    for (int i = 0; i <= L_wezlow; i++)
+	      delete [] macierz[i];
+	  delete [] macierz;
+
+  }
+
+void Macierz::Dodaj_krawedz(int const &a, int const &b, int const &waga)
+{
+  macierz[a][b]=waga;
+  macierz[b][a]=waga;
 }
 
-void Macierz::wypelnij(Macierz &macierz, int g)
+void Macierz::Wypisz()
 {
-    //gestosc procentowa
-    float gestosc = (float)g / 100;
-    //maksymalna ilosc krawedzi
-    int maxliczbaKrawedzi = gestosc*((macierz.liczbaWierzcholkow*(macierz.liczbaWierzcholkow - 1)) / 2);
-    int licznik = 0; //licznik
-
-    for(int i=0; i<macierz.liczbaWierzcholkow; i++)
+  cout<<"Reprezentacja macierzy sasiedztwa"<<endl;
+  cout<<"   ";
+  for (int i = 1; i < L_wezlow; i++)
+  {
+	cout.fill(' ');
+	cout.width(5);
+	cout<<left<<i;
+  }
+  cout<<endl;
+  for (int i = 0; i < L_wezlow; i++)
+  {
+	cout<<" "<<i<<" ";
+    for (int j = 0; j < L_wezlow; j++)
     {
-        //czy wszystkie wierzcholki polaczone
-        int losowaWaga = (rand()%49+1); //losowa 1-50
+	  cout.fill(' ');
+	  cout.width(5);
+      cout <<left<< macierz[i][j];
+	}
+    cout << endl;
+  }
+}
 
-        macierz.dodajWierzcholek(i, (i+1)%macierz.liczbaWierzcholkow, losowaWaga);
-        licznik++;
-    }
+int Macierz::Rozmiar(int const &i)	const
+{
+	return L_wezlow;
+}
 
-    while(licznik < maxliczbaKrawedzi)
-    {
-        //pozostale krawedzie
-        int losowaWaga, losowyV1, losowyV2;
-        do
-        {
-            losowaWaga = (rand()%49 +1);
-            losowyV1 = rand() % macierz.liczbaWierzcholkow;
-            losowyV2 = rand() % macierz.liczbaWierzcholkow;
-            //w przypadku wylosowania takich samych v1,v2
-            if(losowyV1 == losowyV2) losowyV2 = rand() % macierz.liczbaWierzcholkow;
-        }
-        while(macierz.zwrocWaga(losowyV1,losowyV2) != 0);
-        //jezeli krawedz juz nie istniala to dodajemy i zwiekszamy liczbik
-        macierz.dodajWierzcholek(losowyV1, losowyV2, losowaWaga);
-        licznik++;
-    }
-    macierz.wyswietl(); //wyswietl wynik wypelnienia
+int Macierz::Rozmiar() const
+{
+	return L_wezlow;
+}
+
+int Macierz::Waga(int const &a, int const &b) const
+{
+	return macierz[a][b];
+}
+
+int Macierz::Wezel(int const &a, int const &b) const
+{
+	return b;
 }
 
 
-class Lista
+
+class Lista_sasiedztwa
 {
+private:
+  vector<vector<pair<int, int> > > Lista;
+  int L_wezlow;
 public:
-    struct Element      //element listy
-    {
-        int wierzcholek;
-        int waga;
-        Element *nastepny;
-    };
+  Lista_sasiedztwa(); //konstruktory
+  Lista_sasiedztwa(int rozmiar);
+  Lista_sasiedztwa(const Lista_sasiedztwa &L);
+  ~Lista_sasiedztwa(); //destruktor
 
-    Element **lista;
-    int liczbaWierzcholkow;
 
-    Lista(int liczbaWierzcholkow); //konstruktor
-    ~Lista();                     //destruktor
-    int LiczbaWierzcholkow();       //zwraca liczbe wierzcholkow
-    int zwrocWaga(int v1,int v2);   //zwraca wage
-    void dodajWierzcholek(int v1, int v2, int waga); //dodaje wierzhcolek
-    void wyswietl();    //wyswietla
-    void wypelnij(Lista &lista, int g); //wypelnienie dana gestoscia
-
+  void Dodaj_krawedz(int const &a, int const &b, int const &waga);
+  void Wypisz();
+  int Rozmiar(int const &i) const;
+  int Rozmiar() const;
+  int Waga(int const &a, int const &b) const;
+  int Wezel(int const &a, int const & b) const;
 };
 
-Lista::Lista(int liczbaWierzcholkow)
+Lista_sasiedztwa::Lista_sasiedztwa()
 {
-    this->liczbaWierzcholkow = liczbaWierzcholkow;
-    lista = new Element*[liczbaWierzcholkow]; //tworzy tabice list sasiedztwa
-
-    for(int i=0;i<liczbaWierzcholkow;i++)
-    {
-        lista[i] = NULL; //wypelnia tablice nullem
-    }
+    L_wezlow = 0;
 }
 
-Lista::~Lista()
+Lista_sasiedztwa::Lista_sasiedztwa(int rozmiar)
+  {
+    L_wezlow=rozmiar;
+    vector <pair<int, int> > P;
+    for (int i = 0; i<=rozmiar; i++)
+      Lista.push_back(P);
+  }
+
+Lista_sasiedztwa::Lista_sasiedztwa(const Lista_sasiedztwa &L)
+  {
+    L_wezlow = L.Rozmiar();
+    vector <pair<int, int> > P;
+    for (int i = 0; i <= L_wezlow; i++)
+      Lista.push_back(P);
+
+    for (int i = 0; i <= L_wezlow; i++)
+      for (int j=0;j<L.Rozmiar(i);j++)
+        Lista[i].push_back( make_pair(L.Wezel(i, j), L.Waga(i,j)) );
+
+  }
+
+Lista_sasiedztwa::~Lista_sasiedztwa()
 {
-    for(int i=0; i<liczbaWierzcholkow;i++)
-    {
-        if(lista[i] != NULL) //jesli nie jest null
-        {
-            Element *pozycja = lista[i]; //ustawia na liscie
-            do
-            {
-                Element *next = pozycja->nastepny;
-                delete pozycja; //usuwa pozycje
-                pozycja = next;
-            } while(pozycja != NULL);
-        }
-    }
-    delete[] lista;
+    if (!Lista.empty())
+      for (int i = 0; i<=L_wezlow; i++)
+        Lista[i].clear();
+    Lista.clear();
 }
 
-int Lista::LiczbaWierzcholkow()
+
+void Lista_sasiedztwa::Dodaj_krawedz (int const &a, int const &b, int const &waga)
 {
-    return liczbaWierzcholkow;
+  int x = max(a, b);
+  while (x >= Lista.size())
+  {
+    vector <pair<int, int> > P;
+    Lista.push_back(P);
+  }
+  if (a == b) return;
+  Lista[a].push_back(make_pair(b, waga));
+  Lista[b].push_back(make_pair(a, waga));
+  L_wezlow = Lista.size()-1;
 }
 
-int Lista::zwrocWaga(int v1,int v2)
-{
-    if(lista[v1] == NULL)
-    {
-        return 0;           //jesli nie ma elementu
-    }
-    else                    //jesli jest
-    {
-        bool jest = false; //ustawiaomy na false
-        Element *next = lista[v1];  //elementy
-        Element *position = NULL;
-        do
-        {
-            position = next;
-            next = next->nastepny;
-            if(position->wierzcholek == v2)
-            {
-                jest = true;
-                break;
-            }
-        } while (next!=NULL); //do kiedy nastepny nie null
-
-        if(jest) return position -> waga; //zwroc wage
-        else return 0;
-
-    }
-}
-
-void Lista::dodajWierzcholek(int v1, int v2, int waga)
-{
-    if(lista[v1] == NULL)
-    {
-        lista[v1] = new Element;
-        lista[v1] -> wierzcholek = v2;
-        lista[v1] -> waga = waga;
-        lista[v1] -> nastepny = NULL;
-    }
-    else
-    {
-        //bool powtorzenie = false;
-        Element *next = lista[v1];
-        Element *buf = NULL;
-        do
-        {
-            buf = next;
-            next = next->nastepny;
-
-            if(buf->wierzcholek == v2)
-            {
-                //powtorzenie = true;
-                break;
-            }
-        } while(next != NULL);
-
-        Element *nowy = new Element;
-        nowy->wierzcholek = v2;
-        nowy->waga = waga;
-        nowy->nastepny = NULL;
-        buf->nastepny = nowy;
-    }
-}
-
-void Lista::wyswietl()
+void Lista_sasiedztwa::Wypisz()
 {
     cout<<"Reprezentacja listy sasiedztwa"<<endl;
-    for(int i=0; i<liczbaWierzcholkow;i++)
-    {
-        if(lista[i] != NULL)
-        {
-            Element *next = lista[i]; //elementy
-            Element *position = NULL;
-            do
-            {
-                position = next;
-                next = next->nastepny; //ustawiony na nastepny w petli
-                cout << i << "->";
-                cout<<position->wierzcholek<<" $ "<<position->waga<<" "; //wyswietlenie wagi i wierzcholka
-            } while(next != NULL);  //do kiedy nastepny nie jest null
-        }
-        cout<<endl;
+  for (int i = 1; i < Lista.size(); i++)
+  {
+    cout << " " << i << " : ";
+    for (int j = 0; j < Lista[i].size(); j++)
+	{
+      cout <<left<< " [ " << Lista[i][j].first << " | " ;
+	  cout.width(3);
+	  cout.fill(' ');
+	  cout<<left<< Lista[i][j].second<<" ], ";
     }
+    cout << endl;
+  }
 }
 
-void Lista::wypelnij(Lista &lista, int g)
+int Lista_sasiedztwa::Rozmiar(int const &i)	const
 {
-    //gestosc procentowa
-    float gestosc = (float)g / 100;
-    //maksymalna ilosc krawedzi
-    int maxliczbaKrawedzi = gestosc*((lista.liczbaWierzcholkow*(lista.liczbaWierzcholkow - 1)) / 2);
-    int licznik = 0; //licznik
-
-    for(int i=0; i<lista.liczbaWierzcholkow; i++)
-    {
-        //czy wszystkie wierzcholki polaczone
-        int losowaWaga = (rand()%49+1); //losowa 1-50
-
-        lista.dodajWierzcholek(i, (i+1)%lista.liczbaWierzcholkow, losowaWaga);
-        licznik++;
-    }
-
-    while(licznik < maxliczbaKrawedzi)
-    {
-        //pozostale krawedzie
-        int losowaWaga, losowyV1, losowyV2;
-        do
-        {
-            losowaWaga = (rand()%49 +1);
-            losowyV1 = rand() % lista.liczbaWierzcholkow;
-            losowyV2 = rand() % lista.liczbaWierzcholkow;
-            //w przypadku wylosowania takich samych v1,v2
-            if(losowyV1 == losowyV2) losowyV2 = rand() % lista.liczbaWierzcholkow;
-        }
-        while(lista.zwrocWaga(losowyV1,losowyV2) != 0);
-        //jezeli krawedz juz nie istniala to dodajemy i zwiekszamy liczbik
-        lista.dodajWierzcholek(losowyV1, losowyV2, losowaWaga);
-        licznik++;
-    }
-    lista.wyswietl(); //wyswietl wynik wypelnienia
+	return Lista[i].size()-1;
 }
+
+int Lista_sasiedztwa::Rozmiar()	const
+{
+	return Lista.size()-1;
+}
+
+int Lista_sasiedztwa::Waga(int const &a, int const &b) const
+{
+	return Lista[a][b].second;
+}
+
+int Lista_sasiedztwa::Wezel(int const &a, int const &b) const
+{
+	return Lista[a][b].first;
+}
+
 
 
 
@@ -290,46 +222,26 @@ void Lista::wypelnij(Lista &lista, int g)
 int main()
 {
 
-   /* Macierz *m = new Macierz(3);
-    m->dodajWierzcholek(0,1,5);
-    m->dodajWierzcholek(0,2,6);
-    m->dodajWierzcholek(1,0,2);
-    m->dodajWierzcholek(1,2,5);
-    m->dodajWierzcholek(2,0,3);
-    m->dodajWierzcholek(2,1,9);
-    m->wyswietl();*/
+    Macierz *m = new Macierz(3);
+    m->Dodaj_krawedz(1,2,5);
+    m->Dodaj_krawedz(0,2,6);
+    m->Dodaj_krawedz(0,1,2);
 
-    Lista *l = new Lista(3);
-    l->dodajWierzcholek(0,1,5);
-    l->dodajWierzcholek(0,2,6);
-    l->dodajWierzcholek(1,0,2);
-    l->dodajWierzcholek(1,2,5);
-    l->dodajWierzcholek(2,0,3);
-    l->dodajWierzcholek(2,1,9);
-    l->dodajWierzcholek(0,0,0);
-    l->dodajWierzcholek(1,1,0);
-    l->dodajWierzcholek(2,2,0);
-    l->wyswietl();
+    m->Wypisz();
 
-    int lwierzcholkow,g;
+    cout<<endl<<endl;
 
-    cout << "Podaj ilosc wierzcholkow: ";
-    cin >> lwierzcholkow;
-    cout << endl << "Podaj gestosc w %: ";
-    cin >> g;
-    Macierz *macierz = NULL;
-    macierz = new Macierz(lwierzcholkow);
-    macierz->wypelnij(*macierz, g);
+    Lista_sasiedztwa *l = new Lista_sasiedztwa(3);
+    l->Dodaj_krawedz(1,2,5);
+    l->Dodaj_krawedz(0,2,6);
+    l->Dodaj_krawedz(0,1,2);
 
-    cout << "Podaj ilosc wierzcholkow: ";
-    cin >> lwierzcholkow;
-    cout << endl << "Podaj gestosc w %: ";
-    cin >> g;
-    Lista *lista = NULL;
-    lista = new Lista(lwierzcholkow);
-    lista->wypelnij(*lista, g);
+    l->Wypisz();
+
+
 
 
 
     return 0;
 }
+
