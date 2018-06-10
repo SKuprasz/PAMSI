@@ -1,110 +1,115 @@
 #include <iostream>
-#include <ctime>
+#include <time.h>
 #include <windows.h>
 #include <fstream>
 #include <cstdlib>
 
 #include "strutury.h" //zmienic nazwe macierz na gicie
+#include "algorytmy.h"
 
 using namespace std;
-
-//mierzenie czasu
-
-LARGE_INTEGER startTimer()
-{
-  LARGE_INTEGER start;
-  DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), 0);
-  QueryPerformanceCounter(&start);
-  SetThreadAffinityMask(GetCurrentThread(), oldmask);
-  return start;
-}
-LARGE_INTEGER stopTimer()
-{
-  LARGE_INTEGER stop;
-  DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), 0);
-  QueryPerformanceCounter(&stop);
-  SetThreadAffinityMask(GetCurrentThread(), oldmask);
-  return stop;
-}
 
 void Tworz_dane()
 {
 
-  int k = 0, w = 0,a,b;
-  double x=0;
-  for (int i = 1; i <= 1; i++)
-  {
-    if (i == 1) {  w = 10; }
-    if (i == 2) {  w = 50; }
-    if (i == 3) {  w = 100; }
-    if (i == 4) {  w = 500; }
-    if (i == 5) {  w = 1000; }
-    for (int j = 1; j <= 4; j++)
+    int k = 0, w = 0,a,b;
+    for (int i = 3; i <= 3; i++)
     {
-      cout <<endl<< i << " "<<j<<endl;
-      ofstream StrWy;
-      StrWy.open("Dane\\dane0_10.txt");
-      if (!StrWy.is_open())
-        cerr << "Blad wczytania pliku wyjsciowego" << endl;
-      if (j == 1) x = 0.25;
-      if (j == 2) x = 0.50;
-      if (j == 3) x = 0.75;
-      if (j == 4) x = 1;
+        if (i == 1) {  w = 10; }
+        if (i == 2) {  w = 50; }
+        if (i == 3) {  w = 100; }
+        if (i == 4) {  w = 500; }
+        if (i == 5) {  w = 1000; }
 
-      int ile=100;
-      while (ile--)
-      {
-        //cout<<ile<<endl;
+        ofstream StrWy;
+        StrWy.open("Dane\\dane.txt");
+        if (!StrWy.is_open())
+        cerr << "Blad wczytania pliku wyjsciowego" << endl;
+
+        //zmiana gestosci grafu
+        //float x=0.25;
+        //float x=0.50;
+        //float x=0.75;
+        float x=1;
+
+        cout <<endl<< i << " "<<x<<endl;
+
+
         k = (x*w*(w - 1)) / 2;
+        cout<<k<<endl;
         StrWy << w << endl << k << endl;
-        Macierz Graf(w);
-        for (int z = 2; z <= w; z++)
+        int licznik=0;
+        while (licznik < k)
         {
-          Graf.Dodaj_krawedz(z-1, z, 1);
-          StrWy << z-1 << " " << z << endl;
-          k--;
-        }
-        srand(time(NULL)*ile*100);
-        while (k--)
-        {
-          a=0; b=0;
-          while (Graf.Waga(a,b) != 0 || a == b)
-          {
             a = rand() % w + 1;
             b = rand() % w + 1;
-          }
-          Graf.Dodaj_krawedz(a,b,1);
-          StrWy << a <<" "<< b << endl;
-        }
-      }
+            if(a==b) b=rand() % w + 1;
+
+            StrWy << a <<" "<< b << endl;
+            licznik++;
+       }
+
     }
-  }
 }
 
 
 int main()
 {
-
-    Macierz *m = new Macierz(3);
-    m->Dodaj_krawedz(1,2,5);
-    m->Dodaj_krawedz(0,2,6);
-    m->Dodaj_krawedz(0,1,2);
-
-    m->Wypisz();
-
-    cout<<endl<<endl;
-
-    Lista_sasiedztwa *l = new Lista_sasiedztwa(3);
-    l->Dodaj_krawedz(1,2,5);
-    l->Dodaj_krawedz(0,2,6);
-    l->Dodaj_krawedz(0,1,2);
-
-    l->Wypisz();
-
     Tworz_dane();
+    srand(time(NULL));
+
+
+    ofstream StrWy;
+    StrWy.open("wynikiK3M1.txt");
+    if (!StrWy.is_open())
+        cerr << "Blad wczytania pliku wyjsciowego" << endl;
+
+    string nazwa = "Dane\\dane.txt";
+    ifstream StrWe;
+    StrWe.open("Dane\\dane.txt");
+    if (!StrWe.is_open())
+        cerr<<"Blad wczytania pliku wejsciowego"<<endl;
+
+    int rozmiar, l_polaczen;
+    int waga, numer1, numer2;
+
+    double czas;
+    clock_t start, stop;
+
+    start = clock();
+
+    for (int k=0;k<100;k++)
+    {
+        while (!StrWe.ios::eof())
+        {
+            StrWe >> rozmiar >> l_polaczen;
+
+            //Lista_sasiedztwa Graf(rozmiar);
+            Macierz Graf(rozmiar);
+
+            for (int i = 0; i<l_polaczen; i++)
+            {
+                StrWe>>numer1>>numer2;
+                waga = rand()%200+1;
+                Graf.Dodaj_krawedz(numer1, numer2, waga);
+            }
+
+
+            Prim(rozmiar, Graf);
+            //Krus(rozmiar, Graf);
 
 
 
+        }
+
+
+    }
+
+    stop = clock();
+    czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
+
+    StrWy << "Czas sredni: "<<czas/100<<".ms"<<endl;
+    system("pause");
     return 0;
 }
 
