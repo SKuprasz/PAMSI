@@ -70,7 +70,7 @@ void Macierz::Wypisz()
 {
   cout<<"Reprezentacja macierzy sasiedztwa"<<endl;
   cout<<"   ";
-  for (int i = 1; i < L_wezlow; i++)
+  for (int i = 0; i < L_wezlow; i++)
   {
 	cout.fill(' ');
 	cout.width(5);
@@ -170,7 +170,8 @@ Lista_sasiedztwa::~Lista_sasiedztwa()
 void Lista_sasiedztwa::Dodaj_krawedz (int const &a, int const &b, int const &waga)
 {
   int x = max(a, b);
-  while (x >= Lista.size())
+  int g=Lista.size();
+  while (x >= g)
   {
     vector <pair<int, int> > P;
     Lista.push_back(P);
@@ -183,11 +184,11 @@ void Lista_sasiedztwa::Dodaj_krawedz (int const &a, int const &b, int const &wag
 
 void Lista_sasiedztwa::Wypisz()
 {
-    cout<<"Reprezentacja listy sasiedztwa"<<endl;
-  for (int i = 1; i < Lista.size(); i++)
+ int g=Lista.size();
+  for (int i = 1; i < g; i++)
   {
     cout << " " << i << " : ";
-    for (int j = 0; j < Lista[i].size(); j++)
+    for (int j = 0; j < g; j++)
 	{
       cout <<left<< " [ " << Lista[i][j].first << " | " ;
 	  cout.width(3);
