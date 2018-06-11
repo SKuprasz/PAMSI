@@ -13,7 +13,7 @@ void Tworz_dane()
 {
 
     int k = 0, w = 0,a,b;
-    for (int i = 3; i <= 3; i++)
+    for (int i = 5; i <= 5; i++)
     {
         if (i == 1) {  w = 10; }
         if (i == 2) {  w = 50; }
@@ -60,7 +60,7 @@ int main()
 
 
     ofstream StrWy;
-    StrWy.open("wynikiK3M1.txt");
+    StrWy.open("wyniki.txt");
     if (!StrWy.is_open())
         cerr << "Blad wczytania pliku wyjsciowego" << endl;
 
@@ -84,8 +84,8 @@ int main()
         {
             StrWe >> rozmiar >> l_polaczen;
 
-            //Lista_sasiedztwa Graf(rozmiar);
-            Macierz Graf(rozmiar);
+            Lista_sasiedztwa Graf(rozmiar);
+            //Macierz Graf(rozmiar);
 
             for (int i = 0; i<l_polaczen; i++)
             {
@@ -95,8 +95,8 @@ int main()
             }
 
 
-            Prim(rozmiar, Graf);
-            //Krus(rozmiar, Graf);
+            //Prim(rozmiar, Graf);
+            Krus(rozmiar, Graf);
 
 
 
@@ -109,7 +109,7 @@ int main()
     czas = (double)(stop - start)/((CLOCKS_PER_SEC)/1000); //obliczenie czasu
 
     StrWy << "Czas sredni: "<<czas/100<<".ms"<<endl;
+    cout<<czas;
     system("pause");
     return 0;
 }
-
